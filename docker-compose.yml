@@ -1,0 +1,52 @@
+version: '3.1'
+
+services:
+
+  ghost:
+    image: ghost:latest
+    restart: always
+    ports:
+      - 2369:2369
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.ptfm.rule=Host(`postcardsfromthemultiverse.com`)
+      - traefik.http.routers.ptfm.tls=true
+      - traefik.http.routers.ptfm.entrypoints=websecure
+      - traefik.http.routers.ptfm.service=ptfm
+      - traefik.http.routers.ptfm.tls.certresolver=leresolver
+      - traefik.http.services.ptfm.loadbalancer.server.port=2369
+      - traefik.http.middlewares.ptfm.headers.SSLRedirect=true
+      - traefik.http.middlewares.ptfm.headers.STSSeconds=315360000
+      - traefik.http.middlewares.ptfm.headers.browserXSSFilter=true
+      - traefik.http.middlewares.ptfm.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.ptfm.headers.forceSTSHeader=true
+      - traefik.http.middlewares.ptfm.headers.SSLHost=postcardsfromthemultiverse.com
+      - traefik.http.middlewares.ptfm.headers.STSIncludeSubdomains=true
+      - traefik.http.middlewares.ptfm.headers.STSPreload=true
+    environment:
+      server__port: 2369
+      database__client: mysql
+      database__connection__host: $DB_HOST
+      database__connection__port: $DB_PORT
+      database__connection__user: $DB_USER
+      database__connection__password: $DB_PASSWORD
+      database__connection__database: $DB_NAME
+      url: https://postcardsfromthemultiverse.com
+      mail__transport: SMTP
+      mail__options__service: Mailgun
+      mail__options__host: smtp.mailgun.org
+      mail__options__port: 465
+      mail__options__secure: true
+      mail__options__auth__user: $SMTP_USER
+      mail__options__auth__pass: $SMTP_PASSWORD
+    volumes:
+      - ghost_data:/var/lib/ghost/content
+
+volumes:
+  ghost_data:
+  
+networks:
+  default:
+    external: true
+    name: portainer_default
