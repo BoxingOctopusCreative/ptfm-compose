@@ -6,7 +6,7 @@ services:
     image: ghost:latest
     restart: always
     ports:
-      - 2369:2369
+      - 2370:2370
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
@@ -15,7 +15,7 @@ services:
       - traefik.http.routers.ptfm.entrypoints=websecure
       - traefik.http.routers.ptfm.service=ptfm
       - traefik.http.routers.ptfm.tls.certresolver=leresolver
-      - traefik.http.services.ptfm.loadbalancer.server.port=2369
+      - traefik.http.services.ptfm.loadbalancer.server.port=2370
       - traefik.http.middlewares.ptfm.headers.SSLRedirect=true
       - traefik.http.middlewares.ptfm.headers.STSSeconds=315360000
       - traefik.http.middlewares.ptfm.headers.browserXSSFilter=true
@@ -25,7 +25,7 @@ services:
       - traefik.http.middlewares.ptfm.headers.STSIncludeSubdomains=true
       - traefik.http.middlewares.ptfm.headers.STSPreload=true
     environment:
-      server__port: 2369
+      server__port: 2370
       database__client: mysql
       database__connection__host: $DB_HOST
       database__connection__port: $DB_PORT
