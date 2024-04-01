@@ -1,7 +1,7 @@
+---
 version: '3.9'
 
 services:
-
   ghost:
     image: ghost:latest
     restart: always
@@ -41,11 +41,8 @@ services:
       mail__options__auth__user: $SMTP_USER
       mail__options__auth__pass: $SMTP_PASSWORD
     volumes:
-      - ghost_data:/var/lib/ghost/content
+      - /mnt/portainer_int_db_01/pftm:/var/lib/ghost/content
 
-volumes:
-  ghost_data:
-  
 networks:
   default:
     external: true
